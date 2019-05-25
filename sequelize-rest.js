@@ -7,9 +7,9 @@ const connectionString = process.env.DATABASE_URL || 'postgres://postgres:secret
 const sequelize = new Sequelize(connectionString, {define: { timestamps: false }})
 
 const app = express()
-const port = process.env.PORT || 4000
+const port = 4000
 
-.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port, () => console.log(`Listening on port ${port}`))
 
 sequelize.sync()
   .then(() => {
