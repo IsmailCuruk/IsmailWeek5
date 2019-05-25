@@ -39,69 +39,73 @@ sequelize.sync()
   app
   .use(bodyParser.json())
 
-  router.get('/movies', (req, res, next) => {
+  app.get('/movies', (req, res, next) => {
+    const limit = req.query.limit || 25
+    const offset = req.query.offset || 0
     Movie
-      .findAll()
-      .then(movies => {
-        res.send({ movies })
+      .findAll({
+        limit, offset
+      })
+      .then(companies => {
+        res.send({ companies })
       })
       .catch(error => next(error))
   })
   
-  router.get('/movie/:id', (req, res, next) => {
+  app.get('/movie/:id', (req, res, next) => {
     Movie
       .findById(req.params.id)
-      .then(movie => {
-        if (!movie) {
+      .then(company => {
+        if (!company) {
           return res.status(404).send({
-            message: `movie does not exist`
+            message: `company does not exist`
           })
         }
-        return res.send(movie)
+        return res.send(company)
       })
       .catch(error => next(error))
   })
   
-  router.post('/movies', (req, res, next) => {
+  app.post('/movies', (req, res, next) => {
     Movie
       .create(req.body)
-      .then(movie => {
-        if (!movie) {
+      .then(company => {
+        if (!company) {
           return res.status(404).send({
-            message: `movie does not exist`
+            message: `company does not exist`
           })
         }
-        return res.status(201).send(movie)
+        return res.status(201).send(company)
       })
       .catch(error => next(error))
   })
   
-  router.put('/movies/:id', (req, res, next) => {
+  app.put('/movies/:id', (req, res, next) => {
     Movie
       .findById(req.params.id)
-      .then(movie => {
-        if (!movie) {
+      .then(company => {
+        if (!company) {
           return res.status(404).send({
-            message: `movie does not exist`
+            message: `company does not exist`
           })
         }
-        return movie.update(req.body).then(movie => res.send(movie))
+        return company.update(req.body).then(company => res.send(company))
       })
       .catch(error => next(error))
   })
   
-  router.delete('/movies/:id', (req, res, next) => {
+  app.delete('/movies/:id', (req, res, next) => {
     Movie
       .findById(req.params.id)
-      .then(movie => {
-        if (!movie) {
+      .then(company => {
+        if (!company) {
           return res.status(404).send({
-            message: `movie does not exist`
+            message: `company does not exist`
           })
         }
-        return movie.destroy()
+        return company.destroy()
           .then(() => res.send({
-            message: `movie was deleted`
+            message: `company was deleted`
           }))
       })
       .catch(error => next(error))
